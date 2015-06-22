@@ -6,7 +6,9 @@ set -e
 domain=$1
 path=$2
 user=$3
-ipaddr="ip a s dev eth0 | grep -oP 'inet\s+\K[^/]+'"
+ipaddr="$(ip a s dev eth0 | grep -oP 'inet\s+\K[^/]+')"
+echo $user
+echo $ipaddr
 
 # Check user parameter
 sudo yunohost user list --json | grep -qi "\"username\": \"$user\"" \
@@ -25,6 +27,10 @@ sudo yunohost app checkport 4243
 if [[ ! $? -eq 0 ]]; then
   exit 1
 fi
+sudo yunohost app checkport 8080
+if [[ ! $? -eq 0 ]]; then
+  exit 1
+fi
 
 # Install Docker if it is not installed yet
 if [ -f /usr/bin/docker ]; then
@@ -40,29 +46,30 @@ else
 	newgrp docker
 fi
 # Allow Docker to listen to port 4243 and fix DOCKER_OPTS
+sudo cp ../conf/docker.service /lib/systemd/system/docker.service
+sudo chmod 644 /lib/systemd/system/docker.service
+sudo sed -i "s@DOCKER_OPTS=\"-d-H tcp://0.0.0.0:4243 -H unix:///var/run/docker.sock\"@@g" /etc/default/docker
 sudo sh -c "echo 'DOCKER_OPTS=\"-d-H tcp://0.0.0.0:4243 -H unix:///var/run/docker.sock\"' >> /etc/default/docker"
-sudo sed -i "s@DOCKER_OPTS\n=@DOCKER_OPTS=/etc/default/docker\n@g" /etc/init.d/docker
 sudo service docker restart
 
 # Create Shipyard containers
-sudo docker run -it -d --name shipyard-rethinkdb-data \
-    --entrypoint /bin/bash shipyard/rethinkdb -l
-sudo docker run -it -P -d --name shipyard-rethinkdb \
-    --volumes-from shipyard-rethinkdb-data shipyard/rethinkdb
-sudo docker run -it -p 8080:8080 -d --name shipyard \
-    --link shipyard-rethinkdb:rethinkdb shipyard/shipyard
+docker run --rm -v /var/run/docker.sock:/var/run/docker.sock shipyard/deploy start
 
+# Change Shipyard settings
+sudo yunohost firewall allow TCP 8080 > /dev/null 2>&1
+docker run -ti --rm shipyard/shipyard-cli
+shipyard login
+http://$ipaddr:8080
+admin
+shipyard
 # Create admin user
-# docker run --rm -it shipyard/shipyard-cli
-# shipyard login
-# $ip
-# admin
-# shipyard
 # find external ip alternative : curl ipecho.net/plain ; echo
+#shipyard add-account -u demo -p demo123 -r admin
+#shipyard delete-account admin
 
 # Add local engine
-
-# Redirect Shipyard
+shipyard add-engine --id local --addr http://$ipaddr:4243 --cpus 1.0 --memory 1024 --label local
+exit
 
 
 # Configure Nginx and reload

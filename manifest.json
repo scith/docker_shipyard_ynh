@@ -1,5 +1,5 @@
 {
-    "name": "Docker Shipyard",
+    "name": "DockerShipyard",
     "id": "dockershipyard",
     "description": {
         "en": "Docker allows to deploy applications which have not yet been integrated with YunoHost or to manage existing Docker hosts with Shipyard",
@@ -34,8 +34,8 @@
                 "name": "admin",
                 "type": "user",
                 "ask": {
-                    "en": "Choose the Docker administrator (must be an existing YunoHost user)",
-                    "fr": "Choisissez l'administrateur de Docker (doit être un utilisateur YunoHost déjà existant)"
+                    "en": "Choose the Docker administrator (NOT WORKING yet, login with admin/shipyard)",
+                    "fr": "Choisissez l'administrateur de Docker (NE FONCTIONNE PAS, utilisez admin/shipyard)"
                 },
                 "example": "homer"
             }
