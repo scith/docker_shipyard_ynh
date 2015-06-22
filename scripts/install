@@ -11,7 +11,7 @@ ipaddr="ip a s dev eth0 | grep -oP 'inet\s+\K[^/]+'"
 # Check user parameter
 sudo yunohost user list --json | grep -qi "\"username\": \"$user\"" \
 	|| (echo "User does not exist: $user" && exit 1)
-sudo yunohost app setting docker admin_user -v $user
+sudo yunohost app setting dockershipyard admin_user -v $user
 
 # Check domain/path availability
 sudo yunohost app checkurl $domain$path -a dockershipyard \
