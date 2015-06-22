@@ -14,7 +14,7 @@ sudo yunohost user list --json | grep -qi "\"username\": \"$user\"" \
 sudo yunohost app setting docker admin_user -v $user
 
 # Check domain/path availability
-sudo yunohost app checkurl $domain$path -a docker \
+sudo yunohost app checkurl $domain$path -a dockershipyard \
 	|| (echo "Path not available: $domain$path" && exit 1)
 
 # Remove trailing "/" for next commands
