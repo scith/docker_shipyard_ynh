@@ -31,13 +31,13 @@
                 "default": "/docker"
             },
             {
-                "name": "admin",
-                "type": "user",
+                "name": "instructions",
                 "ask": {
-                    "en": "Choose the Docker administrator (NOT WORKING yet, login with admin/shipyard)",
-                    "fr": "Choisissez l'administrateur de Docker (NE FONCTIONNE PAS, utilisez admin/shipyard)"
+                    "en": "Login to Shipyard with admin/shipyard, then follow the instructions in the Readme",
+                    "fr": "Identifiez-vous avec admin/shipyard puis suivez les instructions du Readme)"
                 },
-                "example": "homer"
+                "choices": ["Yes I will", "Yes I will"],
+                "default": "Yes I will"
             }
         ]
     }

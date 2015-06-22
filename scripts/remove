@@ -3,6 +3,8 @@
 domain=$(sudo yunohost app setting dockershipyard domain)
 sudo rm /etc/nginx/conf.d/$domain.d/dockershipyard.conf
 
+sudo yunohost firewall disallow TCP 8080
+
 sudo docker stop shipyard-rethinkdb-data
 sudo docker stop shipyard-rethinkdb
 sudo docker stop shipyard

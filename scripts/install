@@ -5,15 +5,6 @@ set -e
 # Retrieve arguments
 domain=$1
 path=$2
-user=$3
-ipaddr="$(ip a s dev eth0 | grep -oP 'inet\s+\K[^/]+')"
-echo $user
-echo $ipaddr
-
-# Check user parameter
-sudo yunohost user list --json | grep -qi "\"username\": \"$user\"" \
-	|| (echo "User does not exist: $user" && exit 1)
-sudo yunohost app setting dockershipyard admin_user -v $user
 
 # Check domain/path availability
 sudo yunohost app checkurl $domain$path -a dockershipyard \
@@ -55,21 +46,26 @@ sudo service docker restart
 # Create Shipyard containers
 docker run --rm -v /var/run/docker.sock:/var/run/docker.sock shipyard/deploy start
 
-# Change Shipyard settings
-sudo yunohost firewall allow TCP 8080 > /dev/null 2>&1
-docker run -ti --rm shipyard/shipyard-cli
-shipyard login
-http://$ipaddr:8080
-admin
-shipyard
+# Change Shipyard settings -- NOT WORKING YET
+#user=$3
+#ipaddr="$(ip a s dev eth0 | grep -oP 'inet\s+\K[^/]+')"
+# Check user parameter
+#sudo yunohost user list --json | grep -qi "\"username\": \"$user\"" \
+#	|| (echo "User does not exist: $user" && exit 1)
+#sudo yunohost app setting dockershipyard admin_user -v $user
+#sudo yunohost firewall allow TCP 8080 > /dev/null 2>&1
+#docker run -ti --rm shipyard/shipyard-cli
+#shipyard login
+#http://$ipaddr:8080
+#admin
+#shipyard
 # Create admin user
 # find external ip alternative : curl ipecho.net/plain ; echo
 #shipyard add-account -u demo -p demo123 -r admin
 #shipyard delete-account admin
-
 # Add local engine
-shipyard add-engine --id local --addr http://$ipaddr:4243 --cpus 1.0 --memory 1024 --label local
-exit
+#shipyard add-engine --id local --addr http://$ipaddr:4243 --cpus 1.0 --memory 1024 --label local
+#exit
 
 
 # Configure Nginx and reload
