@@ -1,0 +1,14 @@
+#!/bin/bash
+
+domain=$(sudo yunohost app setting docker domain)
+sudo rm /etc/nginx/conf.d/$domain.d/docker.conf
+sudo yunohost firewall disallow TCP 4243
+
+sudo docker stop shipyard-rethinkdb-data
+sudo docker stop shipyard-rethinkdb
+sudo docker stop shipyard
+sudo docker rm shipyard-rethinkdb-data
+sudo docker rm shipyard-rethinkdb
+sudo docker rm shipyard
+
+sudo service nginx reload

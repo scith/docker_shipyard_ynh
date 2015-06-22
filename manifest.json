@@ -1,0 +1,44 @@
+{
+    "name": "Docker Shipyard",
+    "id": "dockershipyard",
+    "description": {
+        "en": "Docker allows to deploy applications which have not yet been integrated with YunoHost or to manage existing Docker hosts with Shipyard",
+        "fr": "Docker permet de déployer des applications qui n'ont pas encore été intégrées à YunoHost ou de gérer des hôtes Docker avec Shipyard"
+    },
+    "developer": {
+        "name": "scith"
+    },
+    "multi_instance": "false",
+    "arguments": {
+        "install" : [
+            {
+                "name": "domain",
+                "type": "domain",
+                "ask": {
+                    "en": "Choose a domain for Docker",
+                    "fr": "Choisissez un domaine pour Docker"
+                },
+                "example": "domain.org"
+            },
+            {
+                "name": "path",
+                "type": "path",
+                "ask": {
+                    "en": "Choose a path for Docker",
+                    "fr": "Choisissez un chemin pour Docker"
+                },
+                "example": "/docker",
+                "default": "/docker"
+            },
+            {
+                "name": "admin",
+                "type": "user",
+                "ask": {
+                    "en": "Choose the Docker administrator (must be an existing YunoHost user)",
+                    "fr": "Choisissez l'administrateur de Docker (doit être un utilisateur YunoHost déjà existant)"
+                },
+                "example": "homer"
+            }
+        ]
+    }
+}
